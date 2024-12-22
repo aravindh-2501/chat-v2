@@ -74,6 +74,10 @@ const ChatFooter = ({ SelectedUser }) => {
     }
   };
 
+  const handleDown = () => {
+    handleSend();
+  };
+
   return (
     <div className="bg-gray-800 p-3 rounded-b-lg flex items-center gap-2">
       {/* Emoji Picker button */}
@@ -99,6 +103,7 @@ const ChatFooter = ({ SelectedUser }) => {
         placeholder="Type a message..."
         className="w-full p-2 rounded-lg bg-gray-700 text-white focus:outline-none"
         value={message}
+        onKeyDown={handleDown}
         onChange={(e) => {
           const inputValue = e.target.value;
           setMessage(inputValue);
