@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 import { create } from "zustand";
-import { useUserStore } from "./userStore"; // Import your user store
+import { useUserStore } from "./userStore";
 
 const socketUrl = import.meta.env.VITE_APP_SOCKET_URL;
 
@@ -44,7 +44,7 @@ export const useSocketStore = create((set, get) => ({
     socketInstance.on("user_list", (users) => set({ users }));
   },
 
-  addMesssage: (newMessages) => {
+  addMessage: (newMessages) => {
     set((state) => ({
       messages: [
         ...state.messages,

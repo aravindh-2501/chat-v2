@@ -8,7 +8,8 @@ import { useSocketStore } from "../../../store/useSocketStore";
 const MessageContainer = ({ SelectedUser }) => {
   const currentUser = useUserStore((state) => state.currentUser);
   const messages = useSocketStore((state) => state.messages);
-  const addMessage = useSocketStore((state) => state.addMesssage);
+  const { addMessage } = useSocketStore();
+
   const messagesEndRef = useRef(null);
 
   useEffect(() => {

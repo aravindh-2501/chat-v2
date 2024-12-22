@@ -8,7 +8,7 @@ import { useSocketStore } from "../../../store/useSocketStore";
 const ChatFooter = ({ SelectedUser }) => {
   const [message, setMessage] = useState("");
   const currentUser = useUserStore((state) => state.currentUser);
-  const { sendMessage, addMesssage } = useSocketStore();
+  const { sendMessage, addMessage } = useSocketStore();
 
   const handleSend = async () => {
     if (!message.trim()) return;
@@ -21,7 +21,7 @@ const ChatFooter = ({ SelectedUser }) => {
     };
 
     // Add locally only for the sender's view
-    addMesssage(newMessage);
+    addMessage(newMessage);
 
     try {
       await apiClient.post(SEND_MSG, newMessage);
