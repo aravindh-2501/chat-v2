@@ -3,17 +3,20 @@ import {
   ChatBubbleBottomCenterTextIcon,
 } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useTheme } from "../store/useTheme";
 import { THEMES } from "../content/data";
 import { useAuth } from "../context/AuthContext";
+import { useUserStore } from "../store/userStore";
 
 const Navbar = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const { logout } = useAuth();
+  const currentUser = useUserStore((state) => state.currentUser);
   const navigate = useNavigate();
-  const location = useLocation();
+
+  // console.log("currentUser", currentUser);
 
   const toggleDropdown = () => setDropdownOpen(!isDropdownOpen);
 
@@ -72,9 +75,9 @@ const Navbar = () => {
         </div>
 
         {/* Logout Button */}
-        {location.pathname !== "/login" && (
+        {currentUser && (
           <button
-            className="flex items-center gap-2 px-4 py-2 font-medium text-white bg-primary rounded-lg shadow-sm transition hover:bg-primary-dark"
+            className="flex items-center gap-2 px-4 py-2 font-medium bg-primary rounded-lg shadow-sm transition hover:bg-primary-dark"
             onClick={handleLogout}
           >
             <ArrowRightStartOnRectangleIcon className="w-5 h-5" />

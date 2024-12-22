@@ -23,13 +23,14 @@ const Register = () => {
     try {
       const res = await apiClient.post(REGISTER, data);
       toast.success(res?.data?.msg);
-      console.log({res})
+      console.log({ res });
       navigate("/login");
       reset();
     } catch (error) {
-      console.log({error})
+      console.log({ error });
       const errorMessage =
-        error?.response?.data?.message || "Registration failed. Please try again.";
+        error?.response?.data?.message ||
+        "Registration failed. Please try again.";
       toast.error(errorMessage);
     }
   };
@@ -48,13 +49,13 @@ const Register = () => {
       />
 
       {/* Right Side */}
-      <div className="flex flex-col items-center justify-center gap-10 p-6">
+      <div className="flex flex-col items-center justify-center gap-10 p-6 lg:p-12">
         {/* Top Section */}
         <div className="flex flex-col items-center justify-center gap-4">
           <div className="border border-primary p-4 rounded-lg shadow-lg bg-base-200">
             <ChatBubbleBottomCenterTextIcon className="w-10 h-10 text-primary animate-bounce" />
           </div>
-          <h1 className="text-5xl font-extrabold mt-4 text-center">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mt-4 text-center">
             Ready to Sparkle? 💖
           </h1>
           <p className="text-base-content/60 text-center mt-2">
@@ -65,7 +66,7 @@ const Register = () => {
         {/* Input Fields */}
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col items-center justify-center gap-5 w-full max-w-sm"
+          className="flex flex-col items-center justify-center gap-5 w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl"
         >
           {/* Username Field */}
           <label className="input input-bordered flex items-center gap-2 w-full shadow-sm">
@@ -129,7 +130,10 @@ const Register = () => {
           </p>
 
           {/* Register Button */}
-          <button type="submit" className="btn btn-primary w-full shadow-lg">
+          <button
+            type="submit"
+            className="btn btn-primary w-full shadow-lg mt-6"
+          >
             💃 Create My Account
           </button>
         </form>

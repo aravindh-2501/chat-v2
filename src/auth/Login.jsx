@@ -1,4 +1,3 @@
-// components/Login.jsx
 import {
   ChatBubbleBottomCenterTextIcon,
   EnvelopeIcon,
@@ -47,13 +46,13 @@ const Login = () => {
   return (
     <div className="w-screen h-screen grid lg:grid-cols-2 bg-base-100">
       {/* Left Side */}
-      <div className="flex flex-col items-center justify-center gap-10 p-6">
+      <div className="flex flex-col items-center justify-center gap-10 p-6 sm:p-10">
         <div className="flex flex-col items-center justify-center gap-4">
           <div className="border border-primary p-4 rounded-lg shadow-lg bg-base-200">
             <ChatBubbleBottomCenterTextIcon className="w-10 h-10 text-primary animate-bounce" />
           </div>
           <div>
-            <h1 className="text-5xl font-extrabold mt-4 text-center">
+            <h1 className="text-3xl sm:text-5xl font-extrabold mt-4 text-center">
               Hello, Gorgeous! 💃
             </h1>
             <p className="text-base-content/60 text-center mt-2">
@@ -64,7 +63,7 @@ const Login = () => {
 
         {/* Input Fields */}
         <form onSubmit={handleSubmit(onSubmit)} className="w-full">
-          <div className="flex flex-col items-center justify-center gap-5 w-3/6 mx-auto">
+          <div className="flex flex-col items-center justify-center gap-5 w-full sm:w-3/6 mx-auto">
             {/* Email Field */}
             <div className="form-control w-full">
               <label className="input input-bordered flex items-center w-full shadow-sm">
@@ -104,7 +103,7 @@ const Login = () => {
               </label>
             </div>
 
-            <p className="text-base-content/80">
+            <p className="text-base-content/80 text-sm sm:text-base">
               New here?{" "}
               <span
                 className="text-primary font-bold underline cursor-pointer"
@@ -123,15 +122,17 @@ const Login = () => {
       </div>
 
       {/* Right Side */}
-      <AuthImagePattern
-        subtitle={
-          <div className="flex items-center justify-center gap-1">
-            Join the fun, charm the world, and chat with style!
-            <ChatBubbleBottomCenterTextIcon className="inline w-6 h-6 text-primary" />
-          </div>
-        }
-        title="Welcome Back, Stunner!"
-      />
+      <div className="hidden lg:block">
+        <AuthImagePattern
+          subtitle={
+            <div className="flex items-center justify-center gap-1">
+              Join the fun, charm the world, and chat with style!
+              <ChatBubbleBottomCenterTextIcon className="inline w-6 h-6 text-primary" />
+            </div>
+          }
+          title="Welcome Back, Stunner!"
+        />
+      </div>
     </div>
   );
 };
