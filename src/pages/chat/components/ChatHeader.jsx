@@ -1,13 +1,20 @@
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
+import { useSocketStore } from "../../../store/useSocketStore";
+import { useUserStore } from "../../../store/userStore";
+import { emitStopTyping } from "../../../utils/socketUtils";
 
 const ChatHeader = ({ SelectedUser }) => {
   const navigate = useNavigate();
+
+  const { socket } = useSocketStore();
+  const currentUser = useUserStore((state) => state.currentUser);
 
   console.log("SelectedUser", SelectedUser);
 
   const clearSelectedUser = () => {
     navigate("/");
+    emitStopTyping(socket, currentUser?._id, SelectedUser?.id);
   };
 
   const avatar =

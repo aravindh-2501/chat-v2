@@ -29,7 +29,7 @@ const Register = () => {
     } catch (error) {
       console.log({ error });
       const errorMessage =
-        error?.response?.data?.message ||
+        error?.response?.data?.error ||
         "Registration failed. Please try again.";
       toast.error(errorMessage);
     }

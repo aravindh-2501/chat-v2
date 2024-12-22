@@ -5,13 +5,14 @@ import { SEND_MSG } from "../../../api/endPoints";
 import { useUserStore } from "../../../store/userStore";
 import { useSocketStore } from "../../../store/useSocketStore";
 import EmojiPicker from "emoji-picker-react";
+import { emitStopTyping } from "../../../utils/socketUtils";
 
 const ChatFooter = ({ SelectedUser }) => {
   const [message, setMessage] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const emojiPickerRef = useRef(null);
   const currentUser = useUserStore((state) => state.currentUser);
-  const { sendMessage, addMessage } = useSocketStore();
+  const { sendMessage, addMessage, socket } = useSocketStore();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -34,6 +35,22 @@ const ChatFooter = ({ SelectedUser }) => {
     setMessage((prevMessage) => prevMessage + emoji.emoji);
   };
 
+  console.log("senderId: currentUser?._id", currentUser?._id);
+  console.log(" receiverId: SelectedUser?.id,", SelectedUser?.id);
+
+  const handleTyping = (inputValue) => {
+    console.log("message", inputValue.length);
+    if (inputValue.trim() === "") {
+      emitStopTyping(socket, currentUser?._id, SelectedUser?.id);
+    } else {
+      socket.emit("typing", {
+        sender: currentUser?._id,
+        receiver: SelectedUser?.id,
+        typing: true,
+      });
+    }
+  };
+
   const handleSend = async () => {
     if (!message.trim()) return;
 
@@ -50,6 +67,8 @@ const ChatFooter = ({ SelectedUser }) => {
       await apiClient.post(SEND_MSG, newMessage);
       sendMessage(newMessage);
       setMessage("");
+
+      emitStopTyping(socket, currentUser?._id, SelectedUser?.id);
     } catch (error) {
       console.error("Error sending message:", error);
     }
@@ -80,7 +99,11 @@ const ChatFooter = ({ SelectedUser }) => {
         placeholder="Type a message..."
         className="w-full p-2 rounded-lg bg-gray-700 text-white focus:outline-none"
         value={message}
-        onChange={(e) => setMessage(e.target.value)}
+        onChange={(e) => {
+          const inputValue = e.target.value;
+          setMessage(inputValue);
+          handleTyping(inputValue);
+        }}
       />
 
       {/* Send Button */}

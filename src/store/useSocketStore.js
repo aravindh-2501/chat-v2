@@ -9,6 +9,7 @@ export const useSocketStore = create((set, get) => ({
   isTyping: false,
   messages: [],
   users: [],
+  typingReceiverId: null,
 
   connectSocket: () => {
     const { currentUser, token } = useUserStore.getState();
@@ -33,8 +34,23 @@ export const useSocketStore = create((set, get) => ({
       console.log("Socket disconnected");
     });
 
-    socketInstance.on("typing", () => set({ isTyping: true }));
-    socketInstance.on("stop_typing", () => set({ isTyping: false }));
+    // Listen for typing events for private chat
+    socketInstance.on("typing", (data) => {
+      console.log("typing", data);
+      const { currentUser } = useUserStore.getState();
+      if (data?.sender !== currentUser?._id) {
+        set({ typingReceiverId: data?.sender, isTyping: data?.typing });
+      }
+    });
+
+    // Listen for stop typing events for private chat
+    socketInstance.on("stop_typing", (data) => {
+      console.log("stop_typing", data);
+      const { currentUser } = useUserStore.getState();
+      if (data?.sender !== currentUser?._id) {
+        set({ typingReceiverId: data?.sender, isTyping: data?.typing });
+      }
+    });
 
     socketInstance.on("receive_message", (message) => {
       set((state) => ({ messages: [...state.messages, message] }));
@@ -42,6 +58,14 @@ export const useSocketStore = create((set, get) => ({
     });
 
     socketInstance.on("user_list", (users) => set({ users }));
+  },
+
+  disconnectSocket: () => {
+    const socket = get().socket;
+    if (socket) {
+      socket.disconnect();
+      set({ socket: null, isTyping: false, messages: [], users: [] });
+    }
   },
 
   addMessage: (newMessages) => {
@@ -53,18 +77,34 @@ export const useSocketStore = create((set, get) => ({
     }));
   },
 
-  disconnectSocket: () => {
-    const socket = get().socket;
-    if (socket) {
-      socket.disconnect();
-      set({ socket: null, isTyping: false, messages: [], users: [] });
-    }
-  },
-
   sendMessage: (message) => {
     const socket = get().socket;
     if (socket) {
       socket.emit("send_message", message);
+    }
+  },
+
+  // Emit the typing event for private chat
+  startTyping: (receiverId) => {
+    const socket = get().socket;
+    const { currentUser } = useUserStore.getState();
+    if (socket && currentUser) {
+      socket.emit("typing", {
+        senderId: currentUser._id,
+        receiverId,
+      });
+    }
+  },
+
+  // Emit the stop typing event for private chat
+  stopTyping: (receiverId) => {
+    const socket = get().socket;
+    const { currentUser } = useUserStore.getState();
+    if (socket && currentUser) {
+      socket.emit("stop_typing", {
+        senderId: currentUser._id,
+        receiverId,
+      });
     }
   },
 }));
