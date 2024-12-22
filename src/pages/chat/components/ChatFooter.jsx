@@ -74,8 +74,11 @@ const ChatFooter = ({ SelectedUser }) => {
     }
   };
 
-  const handleDown = () => {
-    handleSend();
+  const handleDown = (e) => {
+    if (e.key === "Enter" || e.keyCode === 13) {
+      e.preventDefault();
+      handleSend();
+    }
   };
 
   return (
