@@ -4,6 +4,7 @@ import apiClient from "../../../api/apiInstance";
 import { GET_MESSAGES } from "../../../api/endPoints";
 import { useUserStore } from "../../../store/userStore";
 import { useSocketStore } from "../../../store/useSocketStore";
+import { playAudioNotification } from "../../../utils/audioNotification";
 
 const MessageContainer = ({ SelectedUser }) => {
   const currentUser = useUserStore((state) => state.currentUser);
@@ -11,6 +12,10 @@ const MessageContainer = ({ SelectedUser }) => {
   const { addMessage, isTyping } = useSocketStore();
 
   const messagesEndRef = useRef(null);
+
+  const handlenotify = () => {
+    playAudioNotification();
+  };
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -90,6 +95,7 @@ const MessageContainer = ({ SelectedUser }) => {
           </div>
         )}
 
+        <button onClick={handlenotify}>click</button>
         {/* Ref for auto-scrolling */}
         <div ref={messagesEndRef} />
       </div>

@@ -1,6 +1,7 @@
 import { io } from "socket.io-client";
 import { create } from "zustand";
 import { useUserStore } from "./userStore";
+import { playAudioNotification } from "../utils/audioNotification";
 
 const socketUrl = import.meta.env.VITE_APP_SOCKET_URL;
 
@@ -54,6 +55,7 @@ export const useSocketStore = create((set, get) => ({
 
     socketInstance.on("receive_message", (message) => {
       set((state) => ({ messages: [...state.messages, message] }));
+      playAudioNotification();
       console.log("New message received:", message);
     });
 
