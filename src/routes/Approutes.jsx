@@ -2,7 +2,6 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import Register from "../auth/Register";
 import Login from "../auth/Login";
 import Chat from "../pages/chat";
-import ErrorBoundary from "../utils/ErrorBoundary";
 import { useUserStore } from "../store/userStore";
 
 const AppRoutes = () => {
@@ -12,27 +11,21 @@ const AppRoutes = () => {
 
   return (
     <Routes>
-      {/* Default Route (with Error Boundary) */}
       <Route
         path="/"
         element={
           user ? (
-            <ErrorBoundary>
               <Chat />
-            </ErrorBoundary>
           ) : (
             <Navigate to="/login" />
           )
         }
       />
 
-      {/* Chat Route with User ID as URL Parameter */}
       <Route
         path="/chat/:id"
         element={
-          <ErrorBoundary>
             <Chat />
-          </ErrorBoundary>
         }
       />
 
